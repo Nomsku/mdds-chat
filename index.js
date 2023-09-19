@@ -32,12 +32,14 @@ const deleteUserById = (socketId) => {
 
 io.on('connection', (socket) => {
   console.log('a user connected', socket.id);
-
+  let curRoom;
   socket.on('join', (username) => {
     users.push({username: username, id: socket.id});
     console.log('users connected:', users);
+    socket.join('curRoom');
     socket.emit('response', 'Joined with username ' + username);
     socket.emit('chat message', `Hello ${username}! Users online: ${getUserList()}`);
+    socket.emit('chat message', `Remember to join a room before chatting  ${username}!`);
   });
 
   socket.on('disconnect', () => {
@@ -50,10 +52,21 @@ io.on('connection', (socket) => {
     if (msg === '!users'){
         socket.emit('chat message', `Users online: ${getUserList()}`);
     } else {
-    io.emit('chat message', `${getUserName(socket.id)}: ${msg}`);
+      if (curRoom === 'room1') io.to('room1').emit('chat message', `${getUserName(socket.id)}: ${msg}`);
+      if (curRoom === 'room2') io.to('room2').emit('chat message', `${getUserName(socket.id)}: ${msg}`);
+      if (curRoom === 'room3') io.to('room3').emit('chat message', `${getUserName(socket.id)}: ${msg}`);
     }
   });
+
+  socket.on('joinRoom', (rooms) => {
+    socket.join(rooms);
+    curRoom = rooms;
+    socket.emit('chat message', `you joined ` + rooms);
+    console.log('joined a room: ' + rooms);
+  });
 });
+
+
 
 http.listen(3000, () => {
   console.log('listening on port 3000');

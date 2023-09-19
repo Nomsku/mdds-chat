@@ -8,8 +8,23 @@ const msgForm = document.getElementById('input-form');
 const msgInput = msgForm.getElementsByTagName('input')[0];
 const joinForm = document.getElementById('join-form');
 const usernameInput = joinForm.getElementsByTagName('input')[0];
+const room1 = document.getElementById('room1');
+const room2 = document.getElementById('room2');
+const room3 = document.getElementById('room3');
 document.getElementById('chat').classList = 'hidden';
 
+room1.addEventListener('click', () => {
+  socket.emit('joinRoom', 'room1');
+  console.log('moi');
+});
+room2.addEventListener('click', () => {
+  socket.emit('joinRoom', 'room2');
+  console.log('hei');
+});
+room3.addEventListener('click', () => {
+  socket.emit('joinRoom', 'room3');
+  console.log('heippa');
+});
 msgForm.addEventListener('submit', (event) => {
     event.preventDefault();
     if (msgInput.value) {
