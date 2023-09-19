@@ -1,7 +1,7 @@
 'use strict';
 
 // Server URL below must point to your server, localhost works for local development/testing
-const socket = io('http://localhost:3000');
+const socket = io('/');
 
 const messages = document.getElementById('messages');
 const msgForm = document.getElementById('input-form');
@@ -37,6 +37,7 @@ msgForm.addEventListener('submit', (event) => {
     event.preventDefault();
     if (usernameInput.value) {
       socket.emit('join', usernameInput.value);
+      socket.emit('joinRoom', 'room1');
       usernameInput.value = '';
       document.getElementById('login').classList = 'hidden';
       document.getElementById('chat').classList = '';

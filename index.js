@@ -32,11 +32,10 @@ const deleteUserById = (socketId) => {
 
 io.on('connection', (socket) => {
   console.log('a user connected', socket.id);
-  let curRoom;
+  let curRoom = 'room1';
   socket.on('join', (username) => {
     users.push({username: username, id: socket.id});
     console.log('users connected:', users);
-    socket.join('curRoom');
     socket.emit('response', 'Joined with username ' + username);
     socket.emit('chat message', `Hello ${username}! Users online: ${getUserList()}`);
     socket.emit('chat message', `Remember to join a room before chatting  ${username}!`);
@@ -48,7 +47,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('chat message', (msg) => {
-    console.log('message by: ' + socket.id, msg);
+    console.log('message by: ' + socket.id, msg, curRoom);
     if (msg === '!users'){
         socket.emit('chat message', `Users online: ${getUserList()}`);
     } else {
